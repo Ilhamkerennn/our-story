@@ -25,47 +25,39 @@ export default function Home() {
 
   const [isPlaying, setIsPlaying] = useState(false);
 
+  // Auto Volume
   useEffect(() => {
 
-    const playMusic = async () => {
+    if (audioRef.current) {
 
-      if (audioRef.current) {
+      audioRef.current.volume = 0.4;
 
-        audioRef.current.volume = 0.4;
-
-        try {
-
-          await audioRef.current.play();
-
-          setIsPlaying(true);
-
-        } catch (err) {
-
-          console.log("Autoplay dicegah browser");
-
-        }
-
-      }
-
-    };
-
-    playMusic();
+    }
 
   }, []);
 
-  const toggleMusic = () => {
+  // Toggle Music
+  const toggleMusic = async () => {
 
-    if (audioRef.current.paused) {
+    if (!audioRef.current) return;
 
-      audioRef.current.play();
+    try {
 
-      setIsPlaying(true);
+      if (isPlaying) {
 
-    } else {
+        audioRef.current.pause();
+        setIsPlaying(false);
 
-      audioRef.current.pause();
+      } else {
 
-      setIsPlaying(false);
+        await audioRef.current.play();
+        setIsPlaying(true);
+
+      }
+
+    } catch (error) {
+
+      console.log("Music gagal diputar");
 
     }
 
@@ -144,8 +136,10 @@ export default function Home() {
       <audio
         ref={audioRef}
         loop
-        src="/music/romantic.mp3"
-      />
+        preload="auto"
+      >
+        <source src="/music/romantic.mp3" type="audio/mp3" />
+      </audio>
 
       {/* ================================================= */}
       {/* ================= OPENING SCREEN ================= */}
@@ -275,12 +269,30 @@ export default function Home() {
           </div>
 
           {/* ================= MUSIC BUTTON ================= */}
-          <button
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: 1.08 }}
             onClick={toggleMusic}
-            className="fixed bottom-5 right-5 z-50 bg-white/20 backdrop-blur-xl border border-white/20 px-5 py-3 rounded-full text-white shadow-2xl hover:scale-110 transition duration-300"
+            className="fixed bottom-5 right-5 z-[9999]
+            bg-white/20 backdrop-blur-xl
+            border border-white/20
+            px-6 py-4 rounded-full
+            text-white shadow-2xl
+            flex items-center gap-3
+            transition duration-300"
           >
-            {isPlaying ? "🎵 Music On" : "🔇 Music Off"}
-          </button>
+
+            <div className={`w-3 h-3 rounded-full ${
+              isPlaying ? "bg-green-400 animate-pulse" : "bg-red-400"
+            }`} />
+
+            <span className="font-semibold tracking-wide">
+
+              {isPlaying ? "Music Playing" : "Play Music"}
+
+            </span>
+
+          </motion.button>
 
           {/* ================= CUSTOM CURSOR ================= */}
           <motion.div
