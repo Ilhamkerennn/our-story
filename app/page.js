@@ -1,65 +1,280 @@
+"use client";
+
 import Image from "next/image";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 
 export default function Home() {
+
+  const [open, setOpen] = useState(false);
+
+  const [mousePosition, setMousePosition] = useState({
+    x: 0,
+    y: 0
+  });
+
+  const quotes = [
+    "Every love story is beautiful ❤️",
+    "You are my favorite notification ✨",
+    "Forever starts with you 💕",
+    "With you, everything feels better 🥺",
+    "You are my happiest place 🌸"
+  ];
+
+  const [currentQuote, setCurrentQuote] = useState(0);
+
+  // Mouse Move
+  useEffect(() => {
+
+    const handleMouseMove = (e) => {
+      setMousePosition({
+        x: e.clientX,
+        y: e.clientY
+      });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+
+  }, []);
+
+  // Auto Quotes
+  useEffect(() => {
+
+    const interval = setInterval(() => {
+
+      setCurrentQuote((prev) =>
+        prev === quotes.length - 1 ? 0 : prev + 1
+      );
+
+    }, 3000);
+
+    return () => clearInterval(interval);
+
+  }, []);
+
+  // Relationship Counter
+  const startDate = new Date("2025-03-25");
+  const today = new Date();
+
+  const difference = today - startDate;
+
+  const days = Math.floor(
+    difference / (1000 * 60 * 60 * 24)
+  );
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-pink-300 via-pink-400 to-pink-500 flex justify-center items-center p-5 cursor-none">
+
+      {/* ================= NAVBAR ================= */}
+      <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 backdrop-blur-xl bg-white/10 border border-white/20 px-8 py-4 rounded-full shadow-2xl">
+
+        <div className="flex items-center gap-8 text-white font-semibold">
+
+          <Link href="/">
+            <p className="hover:text-pink-200 transition cursor-pointer">
+              Home
+            </p>
+          </Link>
+
+          <Link href="/timeline">
+            <p className="hover:text-pink-200 transition cursor-pointer">
+              Timeline
+            </p>
+          </Link>
+
+          <Link href="/gallery">
+            <p className="hover:text-pink-200 transition cursor-pointer">
+              Gallery
+            </p>
+          </Link>
+
+          <Link href="/letter">
+            <p className="hover:text-pink-200 transition cursor-pointer">
+              Letter
+            </p>
+          </Link>
+
+        </div>
+
+      </div>
+
+      {/* ================= CUSTOM CURSOR ================= */}
+      <motion.div
+        animate={{
+          x: mousePosition.x - 15,
+          y: mousePosition.y - 15
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 500,
+          damping: 30
+        }}
+        className="fixed w-8 h-8 rounded-full bg-white/40 backdrop-blur-md border border-white z-[9999] pointer-events-none"
+      />
+
+      {/* ================= SPOTLIGHT ================= */}
+      <div
+        className="pointer-events-none fixed w-[400px] h-[400px] rounded-full bg-white/10 blur-3xl z-0"
+        style={{
+          left: mousePosition.x - 200,
+          top: mousePosition.y - 200
+        }}
+      />
+
+      {/* ================= AURORA GLOW ================= */}
+      <div className="absolute w-[700px] h-[700px] bg-pink-200 rounded-full blur-3xl opacity-20 animate-pulse top-[-250px] left-[-250px]" />
+
+      <div className="absolute w-[600px] h-[600px] bg-white rounded-full blur-3xl opacity-20 animate-pulse bottom-[-250px] right-[-250px]" />
+
+      {/* ================= FLOATING HEARTS ================= */}
+      <div className="absolute inset-0 overflow-hidden">
+
+        {[...Array(30)].map((_, i) => (
+          <motion.div
+            key={i}
+            animate={{
+              y: [0, -20, 0],
+              opacity: [0.5, 1, 0.5]
+            }}
+            transition={{
+              duration: 2 + Math.random() * 3,
+              repeat: Infinity,
+            }}
+            className="absolute text-white text-2xl"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+          >
+            ❤️
+          </motion.div>
+        ))}
+
+      </div>
+
+      {/* ================= MAIN CARD ================= */}
+      <motion.div
+        initial={{ y: 80, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 1 }}
+        whileHover={{
+          rotateX: 5,
+          rotateY: -5,
+          scale: 1.02
+        }}
+        className="relative overflow-hidden z-10 flex flex-col items-center backdrop-blur-xl bg-white/10 border border-white/20 p-10 rounded-[40px] shadow-2xl max-w-xl w-full"
+      >
+
+        {/* Glass Reflection */}
+        <div className="absolute top-0 left-[-75%] w-[50%] h-full bg-white/20 rotate-12 blur-2xl" />
+
+        {/* Animated Border */}
+        <div className="absolute inset-0 rounded-[40px] border border-pink-200/30 animate-pulse" />
+
+        {/* ================= IMAGE ================= */}
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          className="relative z-10"
+        >
+
+          <Image
+            src="/images/foto1.jpg"
+            width={250}
+            height={250}
+            loading="eager"
+            alt="foto"
+            onClick={() => setOpen(true)}
+            className="rounded-full border-4 border-white shadow-2xl cursor-pointer w-auto h-auto"
+          />
+
+        </motion.div>
+
+        {/* ================= TITLE ================= */}
+        <h1
+          className="relative z-10 text-6xl md:text-7xl text-white mt-6 drop-shadow-lg text-center"
+          style={{ fontFamily: "var(--font-greatvibes)" }}
+        >
+          Our Story ❤️
+        </h1>
+
+        {/* ================= QUOTES ================= */}
+        <motion.p
+          key={currentQuote}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="relative z-10 mt-4 text-lg md:text-xl text-white font-medium text-center"
+        >
+          {quotes[currentQuote]}
+        </motion.p>
+
+        {/* ================= COUNTER ================= */}
+        <div className="relative z-10 mt-5 bg-white/20 px-6 py-3 rounded-full border border-white/20 shadow-lg">
+
+          <p className="text-white text-xl md:text-2xl font-bold text-center">
+            Bersama selama {days} hari 💕
           </p>
+
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+
+        {/* ================= BUTTONS ================= */}
+        <div className="relative z-10 flex gap-4 mt-8 flex-wrap justify-center">
+
+          <Link href="/timeline">
+            <button className="bg-white text-pink-500 px-8 py-3 rounded-full font-bold text-lg shadow-xl hover:scale-110 hover:bg-pink-100 transition duration-300">
+              Enter Our Story
+            </button>
+          </Link>
+
+          <Link href="/gallery">
+            <button className="bg-pink-500 text-white px-8 py-3 rounded-full font-bold text-lg shadow-xl hover:scale-110 hover:bg-pink-600 transition duration-300 border border-white">
+              Gallery 📸
+            </button>
+          </Link>
+
+          <Link href="/letter">
+            <button className="bg-white/20 text-white px-8 py-3 rounded-full font-bold text-lg shadow-xl hover:scale-110 hover:bg-white/30 transition duration-300 border border-white">
+              Love Letter 💌
+            </button>
+          </Link>
+
+        </div>
+
+      </motion.div>
+
+      {/* ================= MODAL ================= */}
+      {open && (
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex justify-center items-center z-50">
+
+          <div className="relative">
+
+            {/* Close Button */}
+            <button
+              onClick={() => setOpen(false)}
+              className="absolute -top-14 right-0 text-white text-5xl hover:scale-125 transition"
+            >
+              ✕
+            </button>
+
+            {/* Fullscreen Image */}
             <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+              src="/images/foto1.jpg"
+              width={800}
+              height={800}
+              alt="fullscreen"
+              className="rounded-3xl shadow-2xl max-h-[90vh] w-auto h-auto"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+          </div>
+
         </div>
-      </main>
+      )}
+
     </div>
   );
 }
