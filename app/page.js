@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 export default function Home() {
 
@@ -19,49 +19,6 @@ export default function Home() {
     return () => clearTimeout(timer);
 
   }, []);
-
-  // ================= MUSIC =================
-  const audioRef = useRef(null);
-
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  // Auto Volume
-  useEffect(() => {
-
-    if (audioRef.current) {
-
-      audioRef.current.volume = 0.4;
-
-    }
-
-  }, []);
-
-  // Toggle Music
-  const toggleMusic = async () => {
-
-    if (!audioRef.current) return;
-
-    try {
-
-      if (isPlaying) {
-
-        audioRef.current.pause();
-        setIsPlaying(false);
-
-      } else {
-
-        await audioRef.current.play();
-        setIsPlaying(true);
-
-      }
-
-    } catch (error) {
-
-      console.log("Music gagal diputar");
-
-    }
-
-  };
 
   // ================= MODAL =================
   const [open, setOpen] = useState(false);
@@ -131,15 +88,6 @@ export default function Home() {
   return (
 
     <>
-
-      {/* ================= AUDIO ================= */}
-      <audio
-        ref={audioRef}
-        loop
-        preload="auto"
-      >
-        <source src="/music/romantic.mp3" type="audio/mp3" />
-      </audio>
 
       {/* ================================================= */}
       {/* ================= OPENING SCREEN ================= */}
@@ -268,32 +216,6 @@ export default function Home() {
 
           </div>
 
-          {/* ================= MUSIC BUTTON ================= */}
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            whileHover={{ scale: 1.08 }}
-            onClick={toggleMusic}
-            className="fixed bottom-5 right-5 z-[9999]
-            bg-white/20 backdrop-blur-xl
-            border border-white/20
-            px-6 py-4 rounded-full
-            text-white shadow-2xl
-            flex items-center gap-3
-            transition duration-300"
-          >
-
-            <div className={`w-3 h-3 rounded-full ${
-              isPlaying ? "bg-green-400 animate-pulse" : "bg-red-400"
-            }`} />
-
-            <span className="font-semibold tracking-wide">
-
-              {isPlaying ? "Music Playing" : "Play Music"}
-
-            </span>
-
-          </motion.button>
-
           {/* ================= CUSTOM CURSOR ================= */}
           <motion.div
             animate={{
@@ -317,95 +239,41 @@ export default function Home() {
             }}
           />
 
-          {/* ================= AURORA GLOW ================= */}
-          <div className="absolute w-[700px] h-[700px] bg-pink-200 rounded-full blur-3xl opacity-20 animate-pulse top-[-250px] left-[-250px]" />
-
-          <div className="absolute w-[600px] h-[600px] bg-white rounded-full blur-3xl opacity-20 animate-pulse bottom-[-250px] right-[-250px]" />
-
-          {/* ================= FLOATING HEARTS ================= */}
-          <div className="absolute inset-0 overflow-hidden">
-
-            {[...Array(30)].map((_, i) => (
-              <motion.div
-                key={i}
-                animate={{
-                  y: [0, -20, 0],
-                  opacity: [0.5, 1, 0.5]
-                }}
-                transition={{
-                  duration: 2 + Math.random() * 3,
-                  repeat: Infinity,
-                }}
-                className="absolute text-white text-2xl"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                }}
-              >
-                ❤️
-              </motion.div>
-            ))}
-
-          </div>
-
           {/* ================= MAIN CARD ================= */}
           <motion.div
             initial={{ y: 80, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 1 }}
-            whileHover={{
-              rotateX: 5,
-              rotateY: -5,
-              scale: 1.02
-            }}
             className="relative overflow-hidden z-10 flex flex-col items-center backdrop-blur-xl bg-white/10 border border-white/20 p-10 rounded-[40px] shadow-2xl max-w-xl w-full"
           >
 
-            {/* Glass Reflection */}
-            <div className="absolute top-0 left-[-75%] w-[50%] h-full bg-white/20 rotate-12 blur-2xl" />
+            <Image
+              src="/images/foto1.jpg"
+              width={250}
+              height={250}
+              alt="foto"
+              onClick={() => setOpen(true)}
+              className="rounded-full border-4 border-white shadow-2xl cursor-pointer"
+            />
 
-            {/* Animated Border */}
-            <div className="absolute inset-0 rounded-[40px] border border-pink-200/30 animate-pulse" />
-
-            {/* IMAGE */}
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="relative z-10"
-            >
-
-              <Image
-                src="/images/foto1.jpg"
-                width={250}
-                height={250}
-                loading="eager"
-                alt="foto"
-                onClick={() => setOpen(true)}
-                className="rounded-full border-4 border-white shadow-2xl cursor-pointer w-auto h-auto"
-              />
-
-            </motion.div>
-
-            {/* TITLE */}
             <h1
-              className="relative z-10 text-6xl md:text-7xl text-white mt-6 drop-shadow-lg text-center"
+              className="text-6xl md:text-7xl text-white mt-6 text-center"
               style={{ fontFamily: "var(--font-greatvibes)" }}
             >
               Our Story ❤️
             </h1>
 
-            {/* QUOTES */}
             <motion.p
               key={currentQuote}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="relative z-10 mt-4 text-lg md:text-xl text-white font-medium text-center"
+              className="mt-4 text-lg md:text-xl text-white text-center"
             >
               {quotes[currentQuote]}
             </motion.p>
 
-            {/* COUNTER */}
-            <div className="relative z-10 mt-5 bg-white/20 px-6 py-3 rounded-full border border-white/20 shadow-lg">
+            <div className="mt-5 bg-white/20 px-6 py-3 rounded-full border border-white/20 shadow-lg">
 
               <p className="text-white text-xl md:text-2xl font-bold text-center">
                 Bersama selama {days} hari 💕
@@ -413,56 +281,7 @@ export default function Home() {
 
             </div>
 
-            {/* BUTTONS */}
-            <div className="relative z-10 flex gap-4 mt-8 flex-wrap justify-center">
-
-              <Link href="/timeline">
-                <button className="bg-white text-pink-500 px-8 py-3 rounded-full font-bold text-lg shadow-xl hover:scale-110 hover:bg-pink-100 transition duration-300">
-                  Enter Our Story
-                </button>
-              </Link>
-
-              <Link href="/gallery">
-                <button className="bg-pink-500 text-white px-8 py-3 rounded-full font-bold text-lg shadow-xl hover:scale-110 hover:bg-pink-600 transition duration-300 border border-white">
-                  Gallery 📸
-                </button>
-              </Link>
-
-              <Link href="/letter">
-                <button className="bg-white/20 text-white px-8 py-3 rounded-full font-bold text-lg shadow-xl hover:scale-110 hover:bg-white/30 transition duration-300 border border-white">
-                  Love Letter 💌
-                </button>
-              </Link>
-
-            </div>
-
           </motion.div>
-
-          {/* ================= MODAL ================= */}
-          {open && (
-            <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex justify-center items-center z-50">
-
-              <div className="relative">
-
-                <button
-                  onClick={() => setOpen(false)}
-                  className="absolute -top-14 right-0 text-white text-5xl hover:scale-125 transition"
-                >
-                  ✕
-                </button>
-
-                <Image
-                  src="/images/foto1.jpg"
-                  width={800}
-                  height={800}
-                  alt="fullscreen"
-                  className="rounded-3xl shadow-2xl max-h-[90vh] w-auto h-auto"
-                />
-
-              </div>
-
-            </div>
-          )}
 
         </div>
 
