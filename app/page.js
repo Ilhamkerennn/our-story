@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function Home() {
 
@@ -19,6 +19,57 @@ export default function Home() {
     return () => clearTimeout(timer);
 
   }, []);
+
+  // ================= MUSIC =================
+  const audioRef = useRef(null);
+
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  useEffect(() => {
+
+    const playMusic = async () => {
+
+      if (audioRef.current) {
+
+        audioRef.current.volume = 0.4;
+
+        try {
+
+          await audioRef.current.play();
+
+          setIsPlaying(true);
+
+        } catch (err) {
+
+          console.log("Autoplay dicegah browser");
+
+        }
+
+      }
+
+    };
+
+    playMusic();
+
+  }, []);
+
+  const toggleMusic = () => {
+
+    if (audioRef.current.paused) {
+
+      audioRef.current.play();
+
+      setIsPlaying(true);
+
+    } else {
+
+      audioRef.current.pause();
+
+      setIsPlaying(false);
+
+    }
+
+  };
 
   // ================= MODAL =================
   const [open, setOpen] = useState(false);
@@ -88,6 +139,14 @@ export default function Home() {
   return (
 
     <>
+
+      {/* ================= AUDIO ================= */}
+      <audio
+        ref={audioRef}
+        loop
+        src="/music/romantic.mp3"
+      />
+
       {/* ================================================= */}
       {/* ================= OPENING SCREEN ================= */}
       {/* ================================================= */}
@@ -214,6 +273,14 @@ export default function Home() {
             </div>
 
           </div>
+
+          {/* ================= MUSIC BUTTON ================= */}
+          <button
+            onClick={toggleMusic}
+            className="fixed bottom-5 right-5 z-50 bg-white/20 backdrop-blur-xl border border-white/20 px-5 py-3 rounded-full text-white shadow-2xl hover:scale-110 transition duration-300"
+          >
+            {isPlaying ? "🎵 Music On" : "🔇 Music Off"}
+          </button>
 
           {/* ================= CUSTOM CURSOR ================= */}
           <motion.div
