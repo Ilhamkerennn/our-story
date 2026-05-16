@@ -71,7 +71,7 @@ export default function Home() {
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-pink-300 via-pink-400 to-pink-500 flex justify-center items-center p-5 cursor-none">
 
       {/* ================= NAVBAR ================= */}
-      <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 backdrop-blur-xl bg-white/10 border border-white/20 px-8 py-4 rounded-full shadow-2xl">
+      <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 backdrop-blur-3xl bg-white/10 border border-white/20 px-8 py-4 rounded-full shadow-2xl">
 
         <div className="flex items-center gap-8 text-white font-semibold">
 
@@ -127,7 +127,7 @@ export default function Home() {
       />
 
       {/* ================= AURORA GLOW ================= */}
-      <div className="absolute w-[700px] h-[700px] bg-pink-200 rounded-full blur-3xl opacity-20 animate-pulse top-[-250px] left-[-250px]" />
+      <div className="absolute w-[700px] h-[700px] bg-pink-200 rounded-full blur-3xl opacity-30 animate-pulse top-[-250px] left-[-250px]" />
 
       <div className="absolute w-[600px] h-[600px] bg-white rounded-full blur-3xl opacity-20 animate-pulse bottom-[-250px] right-[-250px]" />
 
@@ -167,7 +167,7 @@ export default function Home() {
           rotateY: -5,
           scale: 1.02
         }}
-        className="relative overflow-hidden z-10 flex flex-col items-center backdrop-blur-xl bg-white/10 border border-white/20 p-10 rounded-[40px] shadow-2xl max-w-xl w-full"
+        className="relative overflow-hidden z-10 flex flex-col items-center backdrop-blur-3xl bg-white/10 border border-white/20 p-10 rounded-[40px] shadow-2xl max-w-xl w-full"
       >
 
         {/* Glass Reflection */}
@@ -189,15 +189,41 @@ export default function Home() {
             loading="eager"
             alt="foto"
             onClick={() => setOpen(true)}
-            className="rounded-full border-4 border-white shadow-2xl cursor-pointer w-auto h-auto"
+            className="
+              rounded-full
+              border-4
+              border-white
+              shadow-2xl
+              shadow-[0_0_80px_rgba(255,255,255,0.5)]
+              hover:scale-110
+              transition
+              duration-300
+              cursor-pointer
+              w-auto
+              h-auto
+            "
           />
 
         </motion.div>
 
         {/* ================= TITLE ================= */}
         <h1
-          className="relative z-10 text-6xl md:text-7xl text-white mt-6 drop-shadow-lg text-center"
-          style={{ fontFamily: "var(--font-greatvibes)" }}
+          className="
+            relative z-10
+            text-7xl md:text-8xl
+            mt-6
+            text-center
+            bg-gradient-to-r
+            from-white
+            via-pink-100
+            to-pink-300
+            bg-clip-text
+            text-transparent
+            drop-shadow-2xl
+          "
+          style={{
+            fontFamily: "var(--font-greatvibes)"
+          }}
         >
           Our Story ❤️
         </h1>
@@ -214,7 +240,7 @@ export default function Home() {
         </motion.p>
 
         {/* ================= COUNTER ================= */}
-        <div className="relative z-10 mt-5 bg-white/20 px-6 py-3 rounded-full border border-white/20 shadow-lg">
+        <div className="relative z-10 mt-5 bg-white/20 px-6 py-3 rounded-full border border-white/20 shadow-lg backdrop-blur-xl">
 
           <p className="text-white text-xl md:text-2xl font-bold text-center">
             Bersama selama {days} hari 💕
